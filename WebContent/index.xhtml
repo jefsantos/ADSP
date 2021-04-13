@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+      <h:head>
+	<title>Audesp</title>
+	<link rel="shortcut icon" href="resources\img\prodesp.gif"></link>
+	<link rel="stylesheet" type="text/css" href="css\style.css" />
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+
+</h:head>
+    <h:body >
+
+
+	<ui:composition template="/template/common/layout.xhtml">
+
+		<ui:define name="header">
+			<h:graphicImage id="logo" library="img" name="prodesp.gif" />
+			<h:form>
+
+			</h:form>
+
+
+			<h1>Geração de Arquivos XML - AUDESP</h1>
+
+
+		</ui:define>
+		<ui:define name="content">
+		<br/>
+					<h:form>
+					<br/><br/>
+					<p:panel header="Login" style="width:350px;text-align: center;margin:auto;">
+						<h:panelGrid columns="2" cellpadding="4">
+							<h:outputText value="Usuário: " />
+							<p:inputText value="#{usuarioView.usuario.login}" />
+
+							<h:outputText value="Senha: " />
+							<p:password value="#{usuarioView.usuario.senha}" />
+							<p:commandButton value="Entrar" ajax="false"
+								action="#{usuarioView.logar}"
+								style="position:relative; left:130px"  />
+						</h:panelGrid>
+					</p:panel>
+				</h:form>
+			
+		</ui:define>
+    	</ui:composition>
+    	
+    </h:body>
+
+</html>

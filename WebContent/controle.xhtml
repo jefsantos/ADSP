@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition template="/template/common/layout.xhtml">
+		<ui:define name="content">
+			<h:form id="formulario1" enctype="multipart/form-data">
+				<p:fileUpload value="#{fileUploadView.file}" mode="advanced"
+					multiple="true" update="messages"
+					fileUploadListener="#{fileUploadView.carregarArquivo}" />
+				<p:growl id="messages" showDetail="true" life="4000" />
+			</h:form>
+			<h:form id="formulario2">
+				<p:growl id="msgs" showDetail="true" escape="false" />
+				<p:treeTable id="teste" value="#{ttBasicView.root}" var="document"
+					selectionMode="checkbox" selection="#{ttBasicView.selectedNodes}" >
+					<f:facet name="header">
+           				 Arquivos
+          			 </f:facet>
+					<f:facet name="footer">
+						<span style="width: 50px; margin-left: 500px"> 
+							<p:commandButton
+								value="Atualizar" style="margin-right:50px;" actionListener="#{ttBasicView.atualizarArquivos}"  update="formulario2"/>
+							<p:commandButton
+								value="Ler Arquivos" actionListener="#{ttBasicView.lerArquivos}" />
+							<p:commandButton style="margin-left:50px;" type="submit"
+								update="teste" value="Mover"
+								actionListener="#{ttBasicView.moverArquivosParaErros}" />
+							 <p:commandButton
+								style="margin-left:50px;" value="Executar Rotina"
+								actionListener="#{ttBasicView.executarRotinasArquivos}" />
+							 <p:commandButton
+								style="margin-left:50px;" value="Limpeza"
+								actionListener="#{ttBasicView.executarRotinasLimpeza}" />	
+						</span>
+					</f:facet>
+					<p:column headerText="Nome" style="width:55%;">
+						<h:outputText value="#{document.name}" />
+					</p:column>
+					<p:column headerText="Data" style="width:15%;">
+						<h:outputText value="#{document.data}" />
+					</p:column>
+					<p:column headerText="Tamanho" style="width:10%;">
+						<h:outputText value="#{document.size}" />
+					</p:column>
+					<p:column headerText="Tipo" style="width:10%;">
+						<h:outputText value="#{document.type}" />
+					</p:column>
+					<p:column style="width:8%;"
+						rendered="#{document.type == 'Arquivo'}">
+						<p:commandButton value="Download" ajax="false"
+							actionListener="#{fileDownloadView.valueChange}"
+							action="#{fileDownloadView.atualizar}">
+							<p:fileDownload id="fileButton" value="#{fileDownloadView.file}" />
+							<f:attribute name="doc" value="#{document}" />
+							<f:attribute name="nome" value="#{document.name}" />
+							<f:attribute name="tipoArquivo" value="#{document.typeArchive}" />
+							<f:attribute name="localArquivo" value="#{document.localArquivo}" />
+						</p:commandButton>
+					</p:column>
+					
+				<p:column style="width:8%;"
+						rendered="#{document.type == 'Arquivo'}">
+						<p:commandButton value="X" ajax="false"
+							actionListener="#{fileDownloadView.valueChange}"
+							action="#{fileDownloadView.apagarArquivo}" >
+							<p:fileDownload id="apagar" value="#{fileDownloadView.file}" />
+							<f:attribute name="doc" value="#{document}" />
+							<f:attribute name="nome" value="#{document.name}" />
+							<f:attribute name="tipoArquivo" value="#{document.typeArchive}" />
+							<f:attribute name="localArquivo" value="#{document.localArquivo}" />
+						</p:commandButton>
+					</p:column>
+					
+				</p:treeTable>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

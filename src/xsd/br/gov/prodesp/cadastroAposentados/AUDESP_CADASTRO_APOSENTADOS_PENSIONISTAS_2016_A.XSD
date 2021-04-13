@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:gen="http://www.tce.sp.gov.br/audesp/xml/generico"
+    xmlns:cvr="http://www.tce.sp.gov.br/audesp/xml/remuneracao"
+    xmlns:ap="http://www.tce.sp.gov.br/audesp/xml/atospessoal"
+    targetNamespace="http://www.tce.sp.gov.br/audesp/xml/remuneracao" elementFormDefault="qualified"
+    attributeFormDefault="unqualified" version="1.0" xml:lang="pt-BR">
+    <xs:import namespace="http://www.tce.sp.gov.br/audesp/xml/generico" schemaLocation="../generico/AUDESP_TIPOSGENERICOS_2016_A.XSD"/>
+    <xs:import namespace="http://www.tce.sp.gov.br/audesp/xml/atospessoal" schemaLocation="../generico/AUDESP_TIPOSGENERICOS_ATOSPESSOAL_2016_A.XSD"/>
+    <xs:annotation>
+        <xs:documentation>
+            <Data>2016-07-20</Data>
+            <VersaoRevisaoAnterior/>
+            <VersaoRevisaoNova>2016_A</VersaoRevisaoNova>
+            <Descricao>XSD de Cadastro de Aposentados e Pensionistas</Descricao>
+            <Justificativa>Modelo de 2016</Justificativa>
+            <Autor>TCESP</Autor>
+        </xs:documentation>
+    </xs:annotation>
+
+    <!-- Dados das aposentadorias e pensões -->
+    <xs:complexType name="DadosAposentadoriaPensao_t">
+        <xs:sequence>
+            <xs:element name="MunicipioEntidade" type="gen:MunicipioEntidade_t" minOccurs="1" maxOccurs="1"/>
+            <xs:choice>
+                <xs:element name="CargoOrigem" type="ap:NomeMaiusculoAcentuadoComNumerosPontoBarraTraco_t"/>
+                <xs:element name="SemInformacaoDeCargo" type="ap:campoOpcional_t"/>
+            </xs:choice>
+            <xs:element name="DataAposentadoriaPensao" type="gen:DataValida_t" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Dados dos agentes aposentados/pensionistas e de suas pensões/aposentadorias -->
+    <xs:complexType name="DadosAposentadoriasPensoes_t">
+        <xs:sequence>
+            <xs:element name="Nome" type="ap:NomeMaiusculoAcentuadoComNumerosPontoBarraTraco_t" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="CPF" type="gen:CPF_t" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="DataNascimento" type="gen:DataValida_t" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="DadosAposentadoriaPensao" type="cvr:DadosAposentadoriaPensao_t" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Lista de agentes aposentados e de pensionistas -->
+    <xs:complexType name="CadastroAposentadoPensionista_t">
+        <xs:sequence>
+            <xs:element name="Descritor" type="gen:Descritor_t"/>
+            <xs:element name="ListaAposentadoriasPensoes" type="cvr:DadosAposentadoriasPensoes_t" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- root  -->
+    <xs:element name="CadastroAposentadosPensionistas" type="cvr:CadastroAposentadoPensionista_t">
+        <!-- Restrições de unicidade -->
+        <xs:unique name="AposentadoPensionistaUnico">
+            <xs:selector xpath="ListaAposentadosPensionistas"/>
+            <xs:field xpath="CPF"/>
+        </xs:unique>
+    </xs:element>
+</xs:schema>

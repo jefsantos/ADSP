@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xs:schema 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:gen="http://www.tce.sp.gov.br/audesp/xml/generico"
+	xmlns:ap="http://www.tce.sp.gov.br/audesp/xml/atospessoal"
+	xmlns:foap="http://www.tce.sp.gov.br/audesp/xml/remuneracao" 
+	xmlns:aux="http://www.tce.sp.gov.br/audesp/xml/auxiliar"
+	
+	targetNamespace="http://www.tce.sp.gov.br/audesp/xml/remuneracao"
+	attributeFormDefault="unqualified"
+	elementFormDefault="qualified"
+	version="1.0" 
+    xml:lang="pt-BR">
+    
+    <xs:import namespace="http://www.tce.sp.gov.br/audesp/xml/generico" schemaLocation="../generico/AUDESP_TIPOSGENERICOS_2017_A.XSD"/>
+	<xs:import namespace="http://www.tce.sp.gov.br/audesp/xml/atospessoal" schemaLocation="../generico/AUDESP_TIPOSGENERICOS_ATOSPESSOAL_2017_A.XSD"/>
+	<xs:import namespace="http://www.tce.sp.gov.br/audesp/xml/auxiliar" schemaLocation="../auxiliar/AUDESP_TABELASAUXILIARES_2017_A.XSD"/>
+    
+    <xs:annotation>
+        <xs:documentation>
+            <Data>2017-02-03</Data>
+            <VersaoRevisaoAnterior/>
+            <VersaoRevisaoNova>2017_A</VersaoRevisaoNova>
+            <Descricao>XSD de Folha Ordinária do Agente Público</Descricao>
+            <Justificativa>Modelo de 2017</Justificativa>
+            <Autor>Sinn</Autor>
+        </xs:documentation>
+    </xs:annotation>
+    
+    <xs:group name="ValorFolhaOrdinaria_group">
+	  <xs:sequence>
+    	<xs:element name="totalGeralDaRemuneracaoBruta" 	type="ap:moeda" 	minOccurs="1" maxOccurs="1"/>
+    	<xs:element name="totalGeralDeDescontos"	type="ap:moeda"		minOccurs="1" maxOccurs="1"/>
+    	<xs:element name="totalGeralDaRemuneracaoLiquida"	type="ap:moeda" 	minOccurs="1" maxOccurs="1"/>
+    	<xs:element name="Verbas" 	type="foap:Verbas_t" 		minOccurs="1" maxOccurs="unbounded"/>
+	  </xs:sequence>
+	</xs:group>
+	
+    <xs:complexType name="FolhaOrdinariaAgentePublico_t">
+    	<xs:sequence>
+    		<xs:element name="Descritor"		type="gen:DescritorMensal_t"	minOccurs="1" maxOccurs="1"/>
+    		<xs:element name="IdentificacaoAgentePublico" 	type="foap:IdentificacaoAgentePublicoExt_t" 		minOccurs="1" maxOccurs="unbounded"/>
+    		<xs:element name="IdentificacaoPensionista" 	type="foap:IdentificacaoPensionistaExt_t" 	minOccurs="0" maxOccurs="unbounded"/>
+    	</xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="IdentificacaoAgentePublicoExt_t">
+    	<xs:complexContent>
+        	<xs:extension base="ap:IdentificacaoAgentePublico_t">
+    			<xs:sequence>
+    		    	<xs:element name="Valores"	minOccurs="1" maxOccurs="1">
+    					<xs:complexType>
+                			<xs:group ref="foap:ValorFolhaOrdinaria_group"/>
+   						</xs:complexType>
+    				</xs:element>
+    			</xs:sequence>
+    		</xs:extension>
+    	</xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="IdentificacaoPensionistaExt_t">
+    	<xs:complexContent>
+    		<xs:extension base="ap:IdentificacaoPensionista_t">
+    			<xs:sequence>
+    				<xs:element name="Valores"	minOccurs="1" maxOccurs="1">
+    					<xs:complexType>
+                			<xs:group ref="foap:ValorFolhaOrdinaria_group"/>           
+   						</xs:complexType>
+    				</xs:element>
+    			</xs:sequence>
+    		</xs:extension>
+    	</xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="Verbas_t">
+    	<xs:sequence>
+    		<xs:element name="MunicipioVerbaRemuneratoria"		type="gen:CodigoMunicipio_t"	minOccurs="1" maxOccurs="1"/>
+    		<xs:element name="EntidadeVerbaRemuneratoria"		type="gen:CodigoEntidade_t"	minOccurs="1" maxOccurs="1"/>
+    		<xs:element name="CodigoVerbaRemuneratoria"		type="ap:CodigoAlphaNumericoPontoBarraTraco_t"	minOccurs="1" maxOccurs="1"/>
+    		<xs:element name="Valor"	type="ap:moeda"	minOccurs="1" maxOccurs="1"/>
+    		<xs:element name="Natureza"	type="ap:NaturezaVerbas_t"	minOccurs="1" maxOccurs="1"/>
+    		<xs:element name="Especie"	type="ap:EspecieVerbas_t"	minOccurs="1" maxOccurs="1"/>
+    		<xs:element name="TipoVerbaRemuneratoria"	type="foap:TipoVerbaRemuneratoria_t"	minOccurs="1" maxOccurs="1"/>
+    	</xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="TipoVerbaRemuneratoria_t">
+    	<xs:sequence>
+    		<xs:element name="CodigoTipoVerbaRemuneratoria"		type="ap:TipoVerbaRemuneratoria_t"	minOccurs="1" maxOccurs="1"/>
+    	</xs:sequence>
+    </xs:complexType>
+   
+    <!-- root  -->
+    <xs:element name="FolhaOrdinariaAgentePublico" type="foap:FolhaOrdinariaAgentePublico_t"/>
+    <!-- root  -->
+    
+</xs:schema>

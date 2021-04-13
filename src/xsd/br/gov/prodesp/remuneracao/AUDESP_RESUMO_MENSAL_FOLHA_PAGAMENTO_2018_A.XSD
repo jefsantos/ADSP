@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:gen="http://www.tce.sp.gov.br/audesp/xml/generico"
+    xmlns:cvr="http://www.tce.sp.gov.br/audesp/xml/remuneracao"
+    xmlns:ap="http://www.tce.sp.gov.br/audesp/xml/atospessoal"
+    targetNamespace="http://www.tce.sp.gov.br/audesp/xml/remuneracao" elementFormDefault="qualified"
+    attributeFormDefault="unqualified" version="1.0" xml:lang="pt-BR">
+    <xs:import namespace="http://www.tce.sp.gov.br/audesp/xml/generico" schemaLocation="../generico/AUDESP_TIPOSGENERICOS_2018_A.XSD"/>
+    <xs:import namespace="http://www.tce.sp.gov.br/audesp/xml/atospessoal" schemaLocation="../generico/AUDESP_TIPOSGENERICOS_ATOSPESSOAL_2018_A.XSD"/>
+    <xs:annotation>
+        <xs:documentation>
+            <Data>2018-01-12</Data>
+            <VersaoRevisaoAnterior/>
+            <VersaoRevisaoNova>2018_A</VersaoRevisaoNova>
+            <Descricao>XSD de Resumo Mensal de Folha de Pagamento</Descricao>
+            <Justificativa>Modelo de 2018</Justificativa>
+            <Autor>TCESP</Autor>
+        </xs:documentation>
+    </xs:annotation>
+
+    <!-- Resumo por Município/Entidade de Lotação  -->
+    <xs:complexType name="ResumoFolha">
+        <xs:sequence>
+            <xs:element name="MunicipioEntidadeLotacao" type="gen:MunicipioEntidade_t" minOccurs="1" maxOccurs="1"/>  <!-- Município e Entidade de Lotação -->
+            <xs:element name="VlFGTS" type="gen:DecimalPositivo_t" maxOccurs="1" minOccurs="1"/> <!-- Valor Total FGTS  -->
+            <xs:element name="VlContribPrevGeralAgPolitico" type="gen:DecimalPositivo_t" maxOccurs="1" minOccurs="1"/> <!-- Valor Total Contribuição Previdenciária - Regime Geral - Agentes Políticos  -->
+            <xs:element name="VlContribPrevProprioAgPolitico" type="gen:DecimalPositivo_t" maxOccurs="1" minOccurs="1"/> <!-- Valor Total Contribuição Previdenciária - Regime Próprio - Agentes Políticos   -->
+            <xs:element name="VlContribPrevGeralAgNaoPolitico" type="gen:DecimalPositivo_t" maxOccurs="1" minOccurs="1"/> <!-- Valor Total Contribuição Previdenciária - Regime Geral - Agentes Não Políticos  -->
+            <xs:element name="VlContribPrevProprioAgNaoPolitico" type="gen:DecimalPositivo_t" maxOccurs="1" minOccurs="1"/> <!-- Valor Total Contribuição Previdenciária - Regime Próprio - Agentes Não Políticos  -->
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!-- Resumo Folha de Pagamento  -->
+    <xs:complexType name="ResumoFolhaPagamento">
+        <xs:sequence>
+            <xs:element name="Descritor" type="gen:DescritorMensal_t" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="ListaResumoFolhaPagamento" type="cvr:ResumoFolha" minOccurs="1" maxOccurs="unbounded">
+                <!-- Restrições de unicidade -->
+                <xs:unique name="CodigoMunicipioEntidade">
+                    <xs:selector xpath="ResumoFolhaPagamento"/>
+                    <xs:field xpath="MunicipioEntidadeLotacao"/>
+                </xs:unique>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- root  -->
+    <xs:element name="ResumoMensalFolhaPagamento" type="cvr:ResumoFolhaPagamento"/>
+    
+</xs:schema>
